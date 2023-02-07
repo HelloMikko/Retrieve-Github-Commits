@@ -27,7 +27,7 @@
         </div>
     </div>
     <script>
-        fetch('https://api.github.com/HelloMikko/Retrieve-Github-Commits/commits').then(response => response.json())
+        fetch('https://api.github.com/repos/HelloMikko/Retrieve-Github-Commits/commits').then(response => response.json())
             .then(
                 commits => {
                     const commitsList = document.querySelector('#commits');
