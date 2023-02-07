@@ -1,28 +1,63 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Commit History</title>
-  </head>
-  <body>
-    <h1>Commit History</h1>
-    <ul id="commit-history"></ul>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+    <link href="udthemes.css" rel="stylesheet">
+    <title>GitHub Commits</title>
+</head>
+
+<body class="bg-gray-900 h-screen">
+    <div class="container mx-auto mt-20">
+        <div class="bg-gray-800 rounded-lg p-4">
+            <h1 class="text-white text-lg font-medium mb-4">Commits</h1>
+            <table class="table-black border-slate-800">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">SHA</th>
+                        <th class="px-4 py-2">Author</th>
+                        <th class="px-4 py-2">Message</th>
+                    </tr>
+                </thead>
+                <tbody id="commits"></tbody>
+            </table>
+        </div>
+    </div>
     <script>
-      // Fetch the commit history from the Github API
-      fetch('https://github.com/HelloMikko/Retrieve-Github-Commits/commits')
-        .then(response => response.json())
-        .then(commits => {
-          // Get the commit history list from the API response
-          const commitHistory = commits;
-          
-          // Update the commit history in the HTML
-          const commitHistoryList = document.querySelector('#commit-history');
-          commitHistory.forEach(commit => {
-            const li = document.createElement('li');
-            li.innerHTML = `${commit.sha}: ${commit.commit.message}`;
-            commitHistoryList.appendChild(li);
-          });
-        });
+        fetch('https://api.github.com/repos/BraXon-Devs/Intl-Currency-Calc/commits').then(response => response.json())
+            .then(
+                commits => {
+                    const commitsList = document.querySelector('#commits');
+                    commits.forEach(commit => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                          <td class="border px-4 py-2">
+                            <a href="${commit.html_url
+                    }" target="_blank" class="text-indigo-600 hover:text-indigo-300">${commit.sha.substring(0, 7)
+                    }</a>
+                          </td>
+                          <td class="border px-4 py-2">
+      <img src="${commit.author.avatar_url}" alt="Avatar" width="32" height="30" class="rounded-full inline-block mr-2">
+      <span class="shadow-lg shadow-cyan-500 text-white">${commit.commit.author.name}</span>
+    </td>
+    <td class="border px-4 py-2">
+      <a href="${commit.html_url}" target="_blank" class="text-indigo-600 hover:text-indigo-300">${commit.commit.message}</a>
+      ${commit.commit.comment_count ? `<span class="shadow-lg shadow-cyan-500 text-white text-sm inline-block mt-2">
+        <i class="fas fa-comments mr-2"></i>
+        ${commit.commit.comment_count}
+      </span>` : ''}
+      <span class="shadow-sm shadow-cyan-500 text-gray-400 text-xs inline-block mt-2">
+           @${new Date(commit.commit.author.date).toLocaleString()}
+      </span>
+    </td>
+                        `;
+                        commitsList.appendChild(tr);
+                    });
+                });
     </script>
-  </body>
+</body>
+
 </html>
