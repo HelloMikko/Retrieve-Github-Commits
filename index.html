@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Commit History</title>
+  </head>
+  <body>
+    <h1>Commit History</h1>
+    <ul id="commit-history"></ul>
+    <script>
+      // Fetch the commit history from the Github API
+      fetch('https://github.com/HelloMikko/Retrieve-Github-Commits/commits')
+        .then(response => response.json())
+        .then(commits => {
+          // Get the commit history list from the API response
+          const commitHistory = commits;
+          
+          // Update the commit history in the HTML
+          const commitHistoryList = document.querySelector('#commit-history');
+          commitHistory.forEach(commit => {
+            const li = document.createElement('li');
+            li.innerHTML = `${commit.sha}: ${commit.commit.message}`;
+            commitHistoryList.appendChild(li);
+          });
+        });
+    </script>
+  </body>
+</html>
